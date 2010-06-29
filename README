@@ -1,0 +1,18 @@
+Quick Autotools howto
+
+Instructions
+
+step 1
+$ mkdir seed && cp * seed
+
+step 2
+$ cd seed
+
+step 3
+$ ./Autotools-STEP_BY_STEP
+# or read the file for the general order to do things in with explanations
+
+
+see other projects configure.ac's for ideas about how to require libraries
+and get input arguments, as well as configure program defines and detect
+operating system stuff.

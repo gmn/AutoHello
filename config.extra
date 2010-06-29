@@ -1,0 +1,10 @@
+
+have_Olib=no
+AC_ARG_ENABLE(olib,
+AC_HELP_STRING([--enable-olib], [use Olib for printing [[default=no]]]),
+              , enable_olib=no)
+if test x$enable_olib = xyes; then
+    AC_CHECK_LIB([olib], [main],have_Olib=yes, AC_MSG_WARN([*** Can't find the OsogatoLib library - not using.]) )
+fi
+AM_CONDITIONAL(HAVE_OLIB, test x$have_Olib = xyes)
+

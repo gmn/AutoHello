@@ -1,0 +1,89 @@
+#!/bin/bash
+
+#step 1
+touch NEWS README ChangeLog AUTHORS
+
+# 1.4 - 1st write a Makefile by hand, 
+if [ -e Makefile ] ; then
+	mv Makefile Makefile.am
+fi
+
+# 1.45 - make sure that all declarations in the makefile (things that end
+#        with a colon and specify an action) have a .PHONY in front of them
+
+# 2
+autoscan
+
+# 2.5
+rm -f autoscan.log && mv configure.scan configure.ac 
+
+# 2.7
+# adjust configure.ac to make sure it covers all the required:
+#  * headers
+#  * libraries
+#  * sub-directories
+
+## examples ##
+# AC_PROG_RANLIB # checking for ranlib 
+# AC_PROG_F77 # checking for F77 fortran-compiler 
+# AC_CHECK_LIB([my_lib],[main]) # checking for library "my_lib" 
+#   containing function "main" 
+# AC_CHECK_FUNCS([floor pow sqrt]) # checking for the floor, power-of 
+#   and square-root functions 
+
+#    AC_CHECK_PROG( MYPROG, [myprog], myprog, no ) 
+#    if test $MYPROG = no; then 
+#       AC_MSG_ERROR([myprog is not installed.]) 
+#    fi 
+
+# more practical
+# AC_CHECK_LIB(mad,mad_decoder_run,,AC_MSG_ERROR(libmad is required to compile mpg321. See http://www.mars.org/home/rob/proj/mpeg/))
+# you can also use AC_MSG_WARN
+
+cat Autotools-STEP_BY_STEP
+echo
+echo "########################################################"
+echo "### edit configure.ac, then do the rest of the stuff ###"
+echo "########################################################"
+exit
+
+# 3
+aclocal
+
+# 4
+autoheader
+automake -a -c
+# -c flag copies files instead of symlinks
+
+# 4.5
+# in configure.ac: change AC_CONFIG_HEADER to AM_CONFIG_HEADER
+#                   add AM_INIT_AUTOMAKE(exename, version)
+
+# 4.6.0
+cat config.extra >> configure.ac
+# then edit the file and move the new section before AC_CONFIG_FILES and 
+# AC_OUTPUT
+
+# 4.6.1
+# remove seed/Makefile from AC_CONFIG_FILES ( we are not building anything
+#  in seed
+
+# 4.6.5
+aclocal
+automake
+#automake should be silent this time.  if it is, we are on the right track
+
+# 4.8
+autoconf 
+
+# 5
+# ./compile and make a few times.  to make sure it works
+# do a: make clean; make distclean, and start from the top, if it works,
+#  you've got a winner
+
+# addendum: when you need to change stuff in the makefile, how it makes,
+#  options, objects, you change it in Makefile.am, then run automake, 
+#  autoheader and autoconf, each should be completely silent or something is
+#  a miss.  a new Makefile.in will be generated and you'll be good to go
+
+
